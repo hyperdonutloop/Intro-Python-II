@@ -1,4 +1,5 @@
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
@@ -33,19 +34,45 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
-#
+# options
+
+choice_options = {
+    'N': 'north',
+    'S': 'south',
+    'E': 'east',
+    'W': 'west',
+    'Q': 'quit'
+}
 # Main
-#
+## Functions
+def show_welcome_message():
+    welcome_message = (f'Welcome {player.name} You are in the room: {player.currentRoom}')
+    print(welcome_message)
+
+def display_messages():
+    print(f'{player.currentRoom.description}')
+    print(f"{player.currentRoom.name}")
+
+def get_user_choice():
+    choice = input('Go explore. Choose: N, S, E, W, or Q [quit]')
+    return choice_options[str(choice)]
 
 # Make a new player object that is currently in the 'outside' room.
+player = Player(room['outside'], 'Ryan')
 
-# Write a loop that:
-#
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
+
+
+
+## Start of the game
+show_welcome_message()
+display_messages()
+get_user_choice()
+## Game Loop
+# while user_choice != 'quit':
+    # make changes
+
+    # display changes
+    # make another choice
+
+## Quit Game
+# exit()
