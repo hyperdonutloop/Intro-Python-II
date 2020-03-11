@@ -1,5 +1,6 @@
 from room import Room
 from player import Player
+import os
 
 # Declare all the rooms
 
@@ -25,7 +26,7 @@ earlier adventurers. The only exit is to the south."""),
 
 # Link rooms together
 
-room['outside'].n_to = room['foyer']
+room['outside'].n_to = room['foyer'] ## done
 room['foyer'].s_to = room['outside']
 room['foyer'].n_to = room['overlook']
 room['foyer'].e_to = room['narrow']
@@ -50,29 +51,49 @@ def show_welcome_message():
     print(welcome_message)
 
 def display_messages():
+    os.system('clear')
     print(f'{player.currentRoom.description}')
     print(f"{player.currentRoom.name}")
 
 def get_user_choice():
     choice = input('Go explore. Choose: N, S, E, W, or Q [quit]')
-    return choice_options[str(choice)]
+    if choice in choice_options:
+        return choice_options[str(choice)]
+    else:
+        print('Invalid Choice')
+
+def user_navigation(user_input):
+    print("You chose:", user_input)
+    if user_input == 'north' and player.currentRoom.n_to != None:
+        player.currentRoom = player.currentRoom.n_to
+
+    elif user_input == 'south' and player.currentRoom.s_to != None:
+        player.currentRoom = player.currentRoom.s_to
+
+    elif user_input == 'east' and player.currentRoom.e_to != None:
+        player.currentRoom = player.currentRoom.e_to
+
+    elif user_input == 'west' and player.currentRoom.w_to != None:
+        player.currentRoom = player.currentRoom.w_to
+
+    else:
+        print('Error message')
 
 # Make a new player object that is currently in the 'outside' room.
 player = Player(room['outside'], 'Ryan')
 
 
-
-
 ## Start of the game
 show_welcome_message()
 display_messages()
-get_user_choice()
-## Game Loop
-# while user_choice != 'quit':
-    # make changes
+user_choice = get_user_choice()
 
-    # display changes
-    # make another choice
+
+## Game Loop
+while user_choice != 'quit':
+    user_navigation(user_choice)
+    display_messages()
+    user_choice = get_user_choice()
 
 ## Quit Game
-# exit()
+exit()
