@@ -1,5 +1,7 @@
-# Write a class to hold player information, e.g. what room they are in
-# currently.
+import colorama
+from colorama import Fore, Back, Style
+colorama.init()
+
 class Player:
   def __init__(self, currentRoom, name, inventory=[]) :
     self.currentRoom = currentRoom
@@ -29,7 +31,7 @@ class Player:
   
   def display_inventory(self):
     if len(self.inventory) <= 0:
-      print('\nYou have nothing in your inventory!\n')
+      print(Fore.LIGHTBLUE_EX + '\nYou have nothing in your inventory!\n' + Style.RESET_ALL)
     else:
       output = ','.join(map(str, self.inventory))
       print(f"\nYou have: {output}\n")

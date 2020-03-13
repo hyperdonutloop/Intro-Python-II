@@ -39,7 +39,7 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
-room['outside'].items = [Item('Key', 'This opens the door to the cave'), Item('Gold', 'bag of 100 gold')]
+room['outside'].items = [Item('Sword', '\nYou may need this for what lies ahead\n'), Item('Potion', '100 health')]
 
 
 # options
@@ -64,17 +64,18 @@ def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def show_welcome_message():
-    welcome_message = (Fore.RED + f'\nWelcome {player.name} to a game of mystery and possible death, you are in the room: {player.currentRoom}\n' + Style.RESET_ALL)
+    # welcome_message = (Fore.LIGHTBLUE_EX + f'\nWelcome to the game: Palace of Winterhold, {player.name}. You are currently in the room: {player.currentRoom}\n' + Style.RESET_ALL + f'this is a test')
+    welcome_message = (Back.LIGHTWHITE_EX + Fore.BLACK + f'  Palace of WinterHold  \n' + Style.RESET_ALL + f'\nWelcome to the game, {player.name}. You are in the room ' + Back.LIGHTBLUE_EX + f'{player.currentRoom}\n' + Style.RESET_ALL)
     print(welcome_message)
 
 def display_messages():
     # 
     print(f'{player.currentRoom.description}')
-    print(f"{player.currentRoom.name}")
+    # print(f"{player.currentRoom.name}")
     player.currentRoom.display_items_list()
 
 def get_user_choice():
-    return input('Go explore. Choose: [n]:north, [s]:south, [e]:east, [w]:west, or [q]:quit\n\nTo check items in your inventory choose [i]:inventory')
+    return input('Go explore. Choose: [n]:north, [s]:south, [e]:east, [w]:west, or [q]:quit\n\nTo check items in your inventory choose [i]:inventory\n')
     
 
 def gameActions(input):
@@ -91,8 +92,9 @@ def gameActions(input):
             foundItem = False
             for i in player.currentRoom.items:
                 if i.name == item:
-                    print(f'FOUND {item} in {player.currentRoom}')
+                    print(f'\n~~~ Found: {item} in {player.currentRoom} ~~~')
                     player.getItem(i)
+                    print(Fore.LIGHTMAGENTA_EX + f'{i.description}' + Style.RESET_ALL)
                     player.currentRoom.removeItem(i)
                     foundItem = True
             if foundItem == False:
@@ -139,7 +141,6 @@ user_choice = get_user_choice()
 
 ## Game Loop
 while user_choice != 'q':
-    #take action
     gameActions(user_choice)
     display_messages()
     user_choice = get_user_choice()
