@@ -36,23 +36,24 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
-room['outside'].items = [Item('key', 'This opens the door to the cave'), Item('gold bag', 'bag of 100 gold')]
+room['outside'].items = [Item('Key', 'This opens the door to the cave'), Item('Gold', 'bag of 100 gold')]
 
 
 # options
 
-movement_options = {
-    'N': 'north',
-    'S': 'south',
-    'E': 'east',
-    'W': 'west',
-    'Q': 'quit'
-}
+movement_options = [
+    'n',
+    's',
+    'e',
+    'w',
+    'i',
+    'q'
+]
 
-action_options = {
-    't': 'take',
-    'd': 'drop'
-}
+action_options = [
+    'take',
+    'drop'
+]
 # Main
 ## Functions
 def show_welcome_message():
@@ -66,38 +67,35 @@ def display_messages():
     player.currentRoom.display_items_list()
 
 def get_user_choice():
-    return input('Go explore. Choose: N, S, E, W, or Q [quit]')
+    return input('Go explore. Choose: north, south, east, west, or quit\n')
     
 
 def gameActions(input):
     split = input.split(' ')
     print(split)
 
-    if input in movement_options:
-        player.move(input)
+    if len(split) == 2:
+        action = split[0]
+        item = split[1].capitalize()
+        
+        print(f'Performing action: {split[0]}')
+        if action == action_options[0]: #take
+            for i in player.currentRoom.items:
+                if i.name == item:
+                    print(f'FOUND {item} in {player.currentRoom}')
+                    player.getItem(i)
+                    player.currentRoom.removeItem(i)
+                    
+    elif len(split) == 1:
+        if input in movement_options:
+            player.move(input)
+        else:
+            print('Invalid Choice def')
     else:
-        print('Invalid Choice')
+        print('Invalid Choice abc')
         return
     # player.move(choice)
-
-# def user_navigation(user_input):
-#     print("You chose:", user_input)
-#     if user_input == 'north' and player.currentRoom.n_to != None:
-#         player.currentRoom = player.currentRoom.n_to
-
-#     elif user_input == 'south' and player.currentRoom.s_to != None:
-#         player.currentRoom = player.currentRoom.s_to
-
-#     elif user_input == 'east' and player.currentRoom.e_to != None:
-#         player.currentRoom = player.currentRoom.e_to
-
-#     elif user_input == 'west' and player.currentRoom.w_to != None:
-#         player.currentRoom = player.currentRoom.w_to
-
-#     else:
-#         print('Error message')
-
-# Make a new player object that is currently in the 'outside' room.
+    
 player = Player(room['outside'], 'Ryan')
 
 
@@ -108,7 +106,7 @@ user_choice = get_user_choice()
 
 
 ## Game Loop
-while user_choice != 'quit':
+while user_choice != 'q':
     #take action
     gameActions(user_choice)
     display_messages()

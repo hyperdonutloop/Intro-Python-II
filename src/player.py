@@ -6,19 +6,34 @@ class Player:
     self.name = name
     self.inventory = inventory
   
-  def move(self, user_input):
-    print("You chose:", user_input)
-    if user_input == 'north' and self.currentRoom.n_to != None:
+  def move(self, cmd):
+    # print("You chose:", cmd)
+    if cmd == 'n' and self.currentRoom.n_to != None:
       self.currentRoom = self.currentRoom.n_to
 
-    elif user_input == 'south' and self.currentRoom.s_to != None:
+    elif cmd == 's' and self.currentRoom.s_to != None:
       self.currentRoom = self.currentRoom.s_to
 
-    elif user_input == 'east' and self.currentRoom.e_to != None:
+    elif cmd == 'e' and self.currentRoom.e_to != None:
       self.currentRoom = self.currentRoom.e_to
 
-    elif user_input == 'west' and self.currentRoom.w_to != None:
+    elif cmd == 'w' and self.currentRoom.w_to != None:
       self.currentRoom = self.currentRoom.w_to
+
+    elif cmd == 'i':
+      self.display_inventory()
 
     else:
         print('Error message')
+        return
+  
+  def display_inventory(self):
+    if len(self.inventory) <= 0:
+      print('\nYou have nothing in your inventory!\n')
+    else:
+      output = ','.join(map(str, self.inventory))
+      print(f"\nYou have: {output}\n")
+
+
+  def getItem(self, item):
+    self.inventory.append(item)
