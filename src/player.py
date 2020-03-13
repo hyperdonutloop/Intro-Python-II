@@ -37,3 +37,6 @@ class Player:
 
   def getItem(self, item):
     self.inventory.append(item)
+
+  def dropItem(self, item):
+    self.inventory.remove(item)

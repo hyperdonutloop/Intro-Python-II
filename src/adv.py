@@ -2,6 +2,9 @@ from room import Room
 from player import Player
 from item import Item
 import os
+import colorama
+from colorama import Fore, Back, Style
+colorama.init()
 
 # Declare all the rooms
 
@@ -54,10 +57,14 @@ action_options = [
     'take',
     'drop'
 ]
+
 # Main
 ## Functions
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def show_welcome_message():
-    welcome_message = (f'Welcome {player.name} You are in the room: {player.currentRoom}')
+    welcome_message = (Fore.RED + f'\nWelcome {player.name} to a game of mystery and possible death, you are in the room: {player.currentRoom}\n' + Style.RESET_ALL)
     print(welcome_message)
 
 def display_messages():
@@ -67,7 +74,7 @@ def display_messages():
     player.currentRoom.display_items_list()
 
 def get_user_choice():
-    return input('Go explore. Choose: north, south, east, west, or quit\n')
+    return input('Go explore. Choose: [n]:north, [s]:south, [e]:east, [w]:west, or [q]:quit\n\nTo check items in your inventory choose [i]:inventory')
     
 
 def gameActions(input):
@@ -77,22 +84,44 @@ def gameActions(input):
     if len(split) == 2:
         action = split[0]
         item = split[1].capitalize()
-        
-        print(f'Performing action: {split[0]}')
+
+        # print(f'Performing action: {split[0]}')
+
         if action == action_options[0]: #take
+            foundItem = False
             for i in player.currentRoom.items:
                 if i.name == item:
                     print(f'FOUND {item} in {player.currentRoom}')
                     player.getItem(i)
                     player.currentRoom.removeItem(i)
+                    foundItem = True
+            if foundItem == False:
+                clear()
+                print(f'There is no {item} here\n')
+        
+        elif action == action_options[1]:
+            foundItem= False
+            for i in player.inventory:
+                if i.name == item:
+                    player.dropItem(i)
+                    player.currentRoom.addItem(i)
+                    foundItem == True
+            if foundItem == False:
+                clear()
+                print(f'There is no {item} in your inventory.\n')
+        else:
+            clear()
+            print('Invalid Choice!\n')
                     
     elif len(split) == 1:
         if input in movement_options:
             player.move(input)
         else:
-            print('Invalid Choice def')
+            clear()
+            print('Invalid Choice')
     else:
-        print('Invalid Choice abc')
+        clear()
+        print('Invalid Choice')
         return
     # player.move(choice)
     
@@ -100,10 +129,13 @@ player = Player(room['outside'], 'Ryan')
 
 
 ## Start of the game
+clear()
 show_welcome_message()
 display_messages()
-user_choice = get_user_choice()
 
+
+## First user choice
+user_choice = get_user_choice()
 
 ## Game Loop
 while user_choice != 'q':
