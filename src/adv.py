@@ -13,7 +13,7 @@ room = {
                      "North of you, the cave mount beckons"),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east."""),
+passages run north, east, and west."""),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
@@ -25,12 +25,16 @@ to north. The smell of gold permeates the air."""),
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
+
+    'large cave': Room("Large Cave", """You've found a large cave. There is a strange fog in the cave. You hear strange sounds. Passages run west and south"""),
+
+    'small cave': Room("Small Cave", """You've found a smaller cave. There are skeletons and old armor everywhere. The fog is heavy and seems to be emanating from somewhere inside this room. In the corner, there is a chest.""")
 }
 
 
 # Link rooms together
 
-room['outside'].n_to = room['foyer'] ## done
+room['outside'].n_to = room['foyer'] 
 room['foyer'].s_to = room['outside']
 room['foyer'].n_to = room['overlook']
 room['foyer'].e_to = room['narrow']
@@ -38,9 +42,16 @@ room['overlook'].s_to = room['foyer']
 room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
+room['foyer'].w_to = room['large cave']
+room['large cave'].s_to = room['small cave']
 
+# treasure chest
+treasure_chest = ["silver", "gold", "diamonds", "daedric armor"]
+
+# items in rooms
 room['outside'].items = [Item('Sword', '\nYou may need this for what lies ahead\n'), Item('Potion', '100 health')]
-
+room['foyer'].items = [Item('Stamina_Potion', '100 Stamina')]
+room['small cave'].items = [Item(treasure_chest, 'A chest of treasure')]
 
 # options
 
@@ -76,7 +87,37 @@ def display_messages():
 
 def get_user_choice():
     return input('Go explore. Choose: [n]:north, [s]:south, [e]:east, [w]:west, or [q]:quit\n\nTo check items in your inventory choose [i]:inventory\n')
-    
+
+def treasure_choice():
+    print_chest()
+    print("You see a wooden treasure chest on the left")
+
+    action = input("What do you want to do? > ")
+
+    if action.lower() in ["treasure", "chest", "left"]:
+        print("Open it? Press '1'")
+        print("Leave it alone. Press '2")
+        choice = input(">")
+
+        if choice == "1":
+            print("Let's see what's in here... /grins")
+            print("The chest creaks open")
+            print('You find some:')
+
+            for treasure in treasure_chest:
+                print(treasure)
+            
+            print("What do you want to do?")
+
+            # get number of items in treasure chest
+            items_in_chest = len(treasure_chest)
+
+            print(f"Take all {items_in_chest} treasure, press '1")
+            print("Leave it, press '2'")
+
+            treasure_choice = input("> ")
+
+            if treasure_choice == '1'
 
 def gameActions(input):
     split = input.split(' ')
@@ -129,6 +170,29 @@ def gameActions(input):
     
 player = Player(room['outside'], 'Ryan')
 
+# ascii
+def print_chest():
+    print()
+    print("                      _.--. ")
+    print("                  _.-'_:-'|| ")
+    print("              _.-'_.-::::'|| ")
+    print("         _.-:'_.-::::::'  || ")
+    print("       .'`-.-:::::::'     || ")
+    print("      /.'`;|:::::::'      ||_ ")
+    print("     ||   ||::::::'     _.;._'-._ ")
+    print("     ||   ||:::::'  _.-!oo @.!-._'-. ")
+    print("     ('.  ||:::::.-!()oo @!()@.-'_.| ")
+    print("      '.'-;|:.-'.&$@.& ()$%-'o.'-U|| ")
+    print("        `>'-.!@%()@'@_%-'_.-o _.|'|| ")
+    print("         ||-._'-.@.-'_.-' _.-o  |'|| ")
+    print("         ||=[ '-._.-+U/.-'    o |'|| ")
+    print("         || '-.]=|| |'|      o  |'|| ")
+    print("         ||      || |'|        _| '; ")
+    print("         ||      || |'|    _.-'_.-' ")
+    print("         |'-._   || |'|_.-'_.-' ")
+    print("          '-._'-.|| |' `_.-' ")
+    print("              '-.||_/.-' ")
+    print()
 
 ## Start of the game
 clear()
