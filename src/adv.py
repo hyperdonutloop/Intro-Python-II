@@ -26,9 +26,14 @@ to north. The smell of gold permeates the air."""),
 chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 
-    'large cave': Room("Large Cave", """You've found a large cave. There is a strange fog in the cave. You hear strange sounds. Passages run west and south"""),
+    'large cave': Room("Large Cave", """You've found a large cave. There is a 
+strange fog in the cave. You hear strange sounds. 
+Passages run east and south"""),
 
-    'small cave': Room("Small Cave", """You've found a smaller cave. There are skeletons and old armor everywhere. The fog is heavy and seems to be emanating from somewhere inside this room. In the corner, there is a chest.""")
+    'small cave': Room("Small Cave", """You've found a smaller cave. There are 
+skeletons and old armor everywhere. The fog is heavy and seems to be emanating 
+from somewhere inside this room. In the corner, there is a chest. The only way
+out is north""")
 }
 
 
@@ -44,6 +49,8 @@ room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 room['foyer'].w_to = room['large cave']
 room['large cave'].s_to = room['small cave']
+room['large cave'].e_to = room['foyer']
+room['small cave'].n_to = room['large cave']
 
 # treasure chest
 treasure_chest = ["silver", "gold", "diamonds", "daedric armor"]
@@ -51,7 +58,9 @@ treasure_chest = ["silver", "gold", "diamonds", "daedric armor"]
 # items in rooms
 room['outside'].items = [Item('Sword', '\nYou may need this for what lies ahead\n'), Item('Potion', '100 health')]
 room['foyer'].items = [Item('Stamina_Potion', '100 Stamina')]
-room['small cave'].items = [Item(treasure_chest, 'A chest of treasure')]
+room['small cave'].items = [Item('Daedric_Armor', 'Very powerful armor')]
+
+
 
 # options
 
@@ -116,8 +125,11 @@ def treasure_choice():
             print("Leave it, press '2'")
 
             treasure_choice = input("> ")
-
-            if treasure_choice == '1'
+            if treasure_choice == '1':
+                print('\tRejoice! You have recieved some treasures and daedric armor.')
+                print('\tYou just recieved [{}]'.format(', '.join(treasure_chest)))
+            elif treasure_choice == '2':
+                print('I hope this treasure will be here later. I may need them.')
 
 def gameActions(input):
     split = input.split(' ')
@@ -169,6 +181,8 @@ def gameActions(input):
     # player.move(choice)
     
 player = Player(room['outside'], 'Ryan')
+
+
 
 # ascii
 def print_chest():
